@@ -1,7 +1,9 @@
 package co.uk.novafutor.techchallenge.service;
 
+import co.uk.novafutor.techchallenge.dto.AsyncResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class FeedbackService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FeedbackService.class);
 
+    @Value("${msg}")
+    private String MSG;
+
     private static Map<Long, Long> feebackCache = new HashMap<>();
 
     /**
@@ -25,13 +30,15 @@ public class FeedbackService {
      * @param number the number to calculated
      * @return cache
      */
-    public Long getFromCache(final Long number) {
+    public AsyncResponseDTO getFromCache(final Long number) {
         if (feebackCache.containsKey(number)) {
-            return feebackCache.get(number);
+            return AsyncResponseDTO.builder().feedback(feebackCache.get(number)).build();
         } else {
             final Long feedback = this.feedback(number);
             feebackCache.put(number, feedback);
-            return feedback;
+            return AsyncResponseDTO.builder()
+                    .msg(MSG)
+                    .build();
         }
     }
 
@@ -40,7 +47,7 @@ public class FeedbackService {
      * @param number the number to be calculated
      * @return a feedback from any positive natural number ad infinitum
      */
-    @Async("asyncExecutor")
+    @Async
     protected Long feedback(final long number) {
         long numberOfOperations = 0L; // 1 time
         long result = 1L; // 1 time

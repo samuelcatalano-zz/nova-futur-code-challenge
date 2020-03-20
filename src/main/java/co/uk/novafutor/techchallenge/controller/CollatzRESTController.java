@@ -23,7 +23,7 @@ public class CollatzRESTController {
      * @return the iterative version of collatz conjecture
      */
     @GetMapping(value = "/iterative")
-    public ResponseEntity<?> collatzIterative(@RequestParam(value = "number", required = true) final Integer number) {
+    public ResponseEntity<?> collatzIterative(@RequestParam(value = "number") final Integer number) {
         final String result = this.collatzService.collatzIterative(number);
         return ResponseEntity.ok(result);
     }
@@ -34,7 +34,7 @@ public class CollatzRESTController {
      * @return the recursive version of collatz conjecture
      */
     @GetMapping(value = "/recursive")
-    public ResponseEntity<?> collatzRecursive(@RequestParam(value = "number", required = true) final Integer number) {
+    public ResponseEntity<?> collatzRecursive(@RequestParam(value = "number") final Integer number) {
         final String result = this.collatzService.collatzRecursive(number);
         return ResponseEntity.ok(result);
     }
