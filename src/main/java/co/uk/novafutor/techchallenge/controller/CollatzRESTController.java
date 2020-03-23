@@ -1,9 +1,14 @@
 package co.uk.novafutor.techchallenge.controller;
 
+import co.uk.novafutor.techchallenge.json.ErrorMessage;
 import co.uk.novafutor.techchallenge.service.CollatzService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Samuel Catalano
@@ -24,8 +29,15 @@ public class CollatzRESTController {
      */
     @GetMapping(value = "/iterative")
     public ResponseEntity<?> collatzIterative(@RequestParam(value = "number") final Integer number) {
-        final String result = this.collatzService.collatzIterative(number);
-        return ResponseEntity.ok(result);
+        try {
+            final String result = this.collatzService.collatzIterative(number);
+            return ResponseEntity.ok(result);
+        } catch (final NumberFormatException e) {
+            return ResponseEntity.badRequest().body(new ErrorMessage()
+                    .code(400)
+                    .status(HttpStatus.BAD_REQUEST.name())
+                    .message(e.getMessage()));
+        }
     }
 
     /**
@@ -35,7 +47,14 @@ public class CollatzRESTController {
      */
     @GetMapping(value = "/recursive")
     public ResponseEntity<?> collatzRecursive(@RequestParam(value = "number") final Integer number) {
-        final String result = this.collatzService.collatzRecursive(number);
-        return ResponseEntity.ok(result);
+        try {
+            final String result = this.collatzService.collatzRecursive(number);
+            return ResponseEntity.ok(result);
+        } catch (final NumberFormatException e) {
+            return ResponseEntity.badRequest().body(new ErrorMessage()
+                    .code(400)
+                    .status(HttpStatus.BAD_REQUEST.name())
+                    .message(e.getMessage()));
+        }
     }
 }

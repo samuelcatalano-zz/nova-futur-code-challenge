@@ -14,16 +14,19 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CollatzService {
 
-    private StringBuilder builder = new StringBuilder();
+    private final StringBuilder builder = new StringBuilder();
 
     /**
      * Iterative version.
      * @param n the number
      */
-    public String collatzIterative(int n) {
+    public String collatzIterative(Integer n) throws NumberFormatException {
+        if (n <= 0)
+            throw new NumberFormatException("Number must be greater than 0");
+
         String result = "";
         while (n != 1) {
-            builder.append(n + " ");
+            this.builder.append(n + " ");
 
             if (n % 2 == 0) {
                 n = n / 2;
@@ -32,8 +35,8 @@ public class CollatzService {
             }
         }
 
-        builder.append(n);
-        result = builder.toString();
+        this.builder.append(n);
+        result = this.builder.toString();
 
         return result.trim();
     }
@@ -43,17 +46,20 @@ public class CollatzService {
      * @param n the number
      * @return
      */
-    public String collatzRecursive(int n) {
+    public String collatzRecursive(final Integer n) throws NumberFormatException {
+        if (n <= 0)
+            throw new NumberFormatException("Number must be greater than 0");
+
         String result = "";
-        if (n == 1)
-            result = builder.toString() + " 1";
-        else
+        if (n == 1) {
+            result = this.builder.toString() + " 1";
+        } else
             if (n % 2 == 0) {
-                builder.append(" " + n);
-                return collatzRecursive(n / 2);
+                this.builder.append(" " + n);
+                return this.collatzRecursive(n / 2);
             } else {
-                builder.append(" " + n);
-                return collatzRecursive(1 + (3 * n));
+                this.builder.append(" " + n);
+                return this.collatzRecursive(1 + (3 * n));
             }
 
         return result.trim();

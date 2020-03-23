@@ -21,7 +21,7 @@ public class FeedbackService {
     private static final Logger LOG = LoggerFactory.getLogger(FeedbackService.class);
 
     @Value("${msg}")
-    private String MSG;
+    private String msg;
 
     private static Map<Long, Long> feebackCache = new HashMap<>();
 
@@ -30,14 +30,17 @@ public class FeedbackService {
      * @param number the number to calculated
      * @return cache
      */
-    public AsyncResponseDTO getFromCache(final Long number) {
+    public AsyncResponseDTO getFromCache(final Long number) throws NumberFormatException {
+        if (number <= 0)
+            throw new NumberFormatException("Number must be greater than 0");
+
         if (feebackCache.containsKey(number)) {
             return AsyncResponseDTO.builder().feedback(feebackCache.get(number)).build();
         } else {
             final Long feedback = this.feedback(number);
             feebackCache.put(number, feedback);
             return AsyncResponseDTO.builder()
-                    .msg(MSG)
+                    .msg(msg)
                     .build();
         }
     }
@@ -48,7 +51,7 @@ public class FeedbackService {
      * @return a feedback from any positive natural number ad infinitum
      */
     @Async
-    protected Long feedback(final long number) {
+    protected Long feedback(final Long number) {
         long numberOfOperations = 0L; // 1 time
         long result = 1L; // 1 time
 
