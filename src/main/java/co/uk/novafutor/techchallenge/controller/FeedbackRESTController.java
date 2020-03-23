@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author Samuel Catalano
+ * @since 23 March, 2020
+ */
+
 @RestController
 @RequestMapping(value = "/feedback")
 public class FeedbackRESTController {

@@ -35,7 +35,7 @@ public class CollatzService {
         builder.append(n);
         result = builder.toString();
 
-        return result;
+        return result.trim();
     }
 
     /**
@@ -56,6 +56,6 @@ public class CollatzService {
                 return collatzRecursive(1 + (3 * n));
             }
 
-        return result;
+        return result.trim();
     }
 }
